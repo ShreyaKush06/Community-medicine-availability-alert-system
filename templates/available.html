@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Available Medicines{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>📋 All Available Medicines</h1>
+  <p>Queried from the MySQL VIEW <code>available_medicines</code> — shows all stock with quantity &gt; 0.</p>
+</div>
+
+{% if rows %}
+<div class="card">
+  <div class="card-header">
+    💊 Live Availability
+    <span class="badge badge-blue" style="margin-left:.5rem">{{ rows|length }} entries</span>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Medicine</th>
+          <th>Category</th>
+          <th>Life-Saving</th>
+          <th>Pharmacy</th>
+          <th>Area</th>
+          <th>Contact</th>
+          <th>Qty</th>
+          <th>Threshold</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+        <tr>
+          <td><strong>{{ row.medicine_name }}</strong></td>
+          <td><span class="badge badge-gray">{{ row.category }}</span></td>
+          <td>
+            {% if row.life_saving %}
+              <span class="badge badge-critical">🔴 Yes</span>
+            {% else %}
+              <span class="badge badge-gray">No</span>
+            {% endif %}
+          </td>
+          <td>{{ row.pharmacy_name }}</td>
+          <td>{{ row.area }}</td>
+          <td><a href="tel:{{ row.contact }}">{{ row.contact }}</a></td>
+          <td>
+            <strong style="color:{% if row.stock_status=='LOW' %}var(--warning){% else %}var(--success){% endif %}">
+              {{ row.quantity }}
+            </strong>
+          </td>
+          <td>{{ row.threshold }}</td>
+          <td>
+            {% if row.stock_status == 'LOW' %}
+              <span class="badge badge-low">⚠️ LOW</span>
+            {% else %}
+              <span class="badge badge-ok">✅ OK</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+<div class="card">
+  <div class="card-body">
+    <div class="empty-state">
+      <div class="emoji">📭</div>
+      <h3>No medicines currently in stock</h3>
+      <p><a href="{{ url_for('add_stock') }}">Add stock entries</a> to see them here.</p>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

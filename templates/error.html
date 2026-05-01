@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Error{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width:600px;margin:3rem auto">
+  <div class="card-body" style="text-align:center;padding:3rem">
+    <div style="font-size:3rem">⚠️</div>
+    <h2 style="margin:1rem 0 .5rem">Database Error</h2>
+    <p style="color:var(--muted);margin-bottom:1.5rem">Something went wrong connecting to MySQL.</p>
+    <code style="display:block;background:var(--bg);padding:1rem;border-radius:8px;font-size:.85rem;text-align:left;word-break:break-all;color:var(--danger)">
+      {{ error }}
+    </code>
+    <div style="margin-top:1.5rem;font-size:.88rem;color:var(--muted)">
+      Make sure your <code>.env</code> variables are set correctly and MySQL is running.
+    </div>
+    <a href="{{ url_for('index') }}" class="btn btn-primary" style="margin-top:1.5rem">← Back to Home</a>
+  </div>
+</div>
+{% endblock %}

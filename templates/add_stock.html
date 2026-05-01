@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Add / Update Stock{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>➕ Add / Update Medicine Stock</h1>
+  <p>Admin form — uses MySQL stored procedure <code>update_stock()</code> internally.</p>
+</div>
+
+<div style="display:grid;grid-template-columns:360px 1fr;gap:2rem;align-items:start">
+
+  <!-- Form -->
+  <div class="card">
+    <div class="card-header">📝 Stock Entry Form</div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('add_stock') }}">
+        <div style="display:flex;flex-direction:column;gap:1.2rem">
+
+          <div class="form-group">
+            <label for="pharmacy_id">Pharmacy</label>
+            <select id="pharmacy_id" name="pharmacy_id" required>
+              <option value="">-- Select Pharmacy --</option>
+              {% for p in pharmacies %}
+                <option value="{{ p.pharmacy_id }}">{{ p.name }} ({{ p.area }})</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="medicine_id">Medicine</label>
+            <select id="medicine_id" name="medicine_id" required>
+              <option value="">-- Select Medicine --</option>
+              {% for m in medicines %}
+                <option value="{{ m.medicine_id }}">{{ m.name }} — {{ m.category }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="quantity">Quantity (units)</label>
+            <input type="number" id="quantity" name="quantity" min="0" placeholder="e.g. 100" required>
+          </div>
+
+          <div class="form-group">
+            <label for="threshold">Alert Threshold</label>
+            <input type="number" id="threshold" name="threshold" min="1" placeholder="e.g. 20" value="10" required>
+            <small style="color:var(--muted);font-size:.8rem">Auto-alert fires when quantity falls below this.</small>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
+            💾 Save Stock
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Recent Stock Table -->
+  <div class="card">
+    <div class="card-header">📊 Recent Stock Entries</div>
+    {% if recent %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Pharmacy</th>
+            <th>Area</th>
+            <th>Medicine</th>
+            <th>Category</th>
+            <th>Qty</th>
+            <th>Threshold</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in recent %}
+          <tr>
+            <td>{{ row.pharmacy_name }}</td>
+            <td>{{ row.area }}</td>
+            <td>{{ row.medicine_name }}</td>
+            <td><span class="badge badge-gray">{{ row.category }}</span></td>
+            <td>
+              <strong style="color: {% if row.stock_status=='LOW' %}var(--warning){% else %}var(--text){% endif %}">
+                {{ row.quantity }}
+              </strong>
+            </td>
+            <td>{{ row.threshold }}</td>
+            <td>
+              {% if row.stock_status == 'LOW' %}
+                <span class="badge badge-low">⚠️ LOW</span>
+              {% else %}
+                <span class="badge badge-ok">✅ OK</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="card-body">
+      <div class="empty-state">
+        <div class="emoji">📭</div>
+        <h3>No stock entries yet</h3>
+        <p>Use the form to add the first entry.</p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Community Medicine Availability System</h1>
+  <p>Track medicine stock across local pharmacies. Get alerts when supplies run low.</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon blue">🏥</div>
+    <div>
+      <div class="stat-value">{{ pharmacies }}</div>
+      <div class="stat-label">Registered Pharmacies</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green">💊</div>
+    <div>
+      <div class="stat-value">{{ medicines }}</div>
+      <div class="stat-label">Medicines Tracked</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon yellow">⚠️</div>
+    <div>
+      <div class="stat-value">{{ low_stock }}</div>
+      <div class="stat-label">Low Stock Items</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon red">🚨</div>
+    <div>
+      <div class="stat-value">{{ alerts }}</div>
+      <div class="stat-label">Total Alerts Generated</div>
+    </div>
+  </div>
+</div>
+
+<!-- Section Title -->
+<div class="page-header" style="margin-bottom:1rem">
+  <h1 style="font-size:1.2rem">Quick Actions</h1>
+</div>
+
+<div class="quick-actions">
+  <a href="{{ url_for('search') }}" class="action-btn">
+    <div class="icon">🔍</div>
+    <div>
+      Search Medicine
+      <small>Find stock across pharmacies</small>
+    </div>
+  </a>
+  <a href="{{ url_for('available') }}" class="action-btn">
+    <div class="icon">📋</div>
+    <div>
+      View All Available
+      <small>Browse medicines in stock</small>
+    </div>
+  </a>
+  <a href="{{ url_for('add_stock') }}" class="action-btn">
+    <div class="icon">➕</div>
+    <div>
+      Add / Update Stock
+      <small>Admin stock management</small>
+    </div>
+  </a>
+  <a href="{{ url_for('alerts') }}" class="action-btn">
+    <div class="icon" style="background:var(--danger-light)">🚨</div>
+    <div>
+      View Alerts
+      <small>Shortage notifications</small>
+    </div>
+  </a>
+</div>
+
+<!-- About Section -->
+<div class="card" style="margin-top:2.5rem">
+  <div class="card-header">ℹ️ About This System</div>
+  <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;line-height:1.8;color:var(--muted);font-size:.92rem">
+    <div>
+      <strong style="color:var(--text)">Database Features</strong><br>
+      • MySQL with FK constraints &amp; CHECK constraints<br>
+      • TRIGGER: auto-alerts on low stock<br>
+      • VIEW: <code>available_medicines</code><br>
+      • STORED PROCEDURE: <code>update_stock()</code>
+    </div>
+    <div>
+      <strong style="color:var(--text)">Application Features</strong><br>
+      • JOIN-based medicine search across pharmacies<br>
+      • Area-wise filtering of results<br>
+      • Life-saving medicine flag on all alerts<br>
+      • Real-time stock status (OK / LOW)
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Search Medicine{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>🔍 Search Medicine Availability</h1>
+  <p>Find which pharmacies have a specific medicine in stock.</p>
+</div>
+
+<!-- Search Form -->
+<div class="search-form">
+  <form method="GET" action="{{ url_for('search') }}">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="medicine_name">Medicine Name</label>
+        <input
+          type="text"
+          id="medicine_name"
+          name="medicine_name"
+          placeholder="e.g. Paracetamol, Insulin…"
+          value="{{ query_name }}"
+          list="medicine-list"
+          autocomplete="off"
+        >
+        <datalist id="medicine-list">
+          {% for m in medicines %}
+            <option value="{{ m.name }}">{{ m.category }}</option>
+          {% endfor %}
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label for="area">Filter by Area (optional)</label>
+        <select id="area" name="area">
+          <option value="">All Areas</option>
+          {% for area in areas %}
+            <option value="{{ area }}" {% if area == query_area %}selected{% endif %}>{{ area }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="height:42px">
+        🔍 Search
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Results -->
+{% if searched %}
+  {% if results %}
+    <div class="card">
+      <div class="card-header">
+        📦 Results for "{{ query_name }}"
+        {% if query_area %} in {{ query_area }}{% endif %}
+        <span class="badge badge-blue" style="margin-left:.5rem">{{ results|length }} pharmacies</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Pharmacy</th>
+              <th>Area</th>
+              <th>Contact</th>
+              <th>Medicine</th>
+              <th>Category</th>
+              <th>Life-Saving</th>
+              <th>Quantity</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in results %}
+            <tr>
+              <td><strong>{{ row.pharmacy_name }}</strong></td>
+              <td>{{ row.area }}</td>
+              <td>
+                <a href="tel:{{ row.contact }}">{{ row.contact }}</a>
+              </td>
+              <td>{{ row.medicine_name }}</td>
+              <td><span class="badge badge-gray">{{ row.category }}</span></td>
+              <td>
+                {% if row.life_saving %}
+                  <span class="badge badge-critical">🔴 Yes</span>
+                {% else %}
+                  <span class="badge badge-gray">No</span>
+                {% endif %}
+              </td>
+              <td>
+                <strong
+                  style="color: {% if row.stock_status == 'LOW' %}var(--warning){% else %}var(--success){% endif %}">
+                  {{ row.quantity }}
+                </strong>
+              </td>
+              <td>
+                {% if row.stock_status == 'LOW' %}
+                  <span class="badge badge-low">⚠️ LOW</span>
+                {% else %}
+                  <span class="badge badge-ok">✅ OK</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {% else %}
+    <div class="card">
+      <div class="card-body">
+        <div class="empty-state">
+          <div class="emoji">😔</div>
+          <h3>No pharmacies found with "{{ query_name }}" in stock</h3>
+          <p>Try a different name or remove the area filter.</p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+{% else %}
+  <!-- Suggestions / quick picks -->
+  <div class="card">
+    <div class="card-header">💡 Quick Search Suggestions</div>
+    <div class="card-body" style="display: flex; flex-wrap: wrap; gap: 0.6rem">
+      {% for m in medicines %}
+        <a href="{{ url_for('search', medicine_name=m.name) }}" class="badge badge-blue" style="text-decoration:none;padding:6px 12px;font-size:.85rem">
+          {{ m.name }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

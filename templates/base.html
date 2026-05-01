@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MedAlert{% endblock %} — Community Medicine System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💊</text></svg>">
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="{{ url_for('index') }}" class="nav-brand">
+    💊 MedAlert
+    <span class="pill">Community</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="{{ url_for('index') }}"     class="{% if request.endpoint=='index'     %}active{% endif %}">🏠 Home</a></li>
+    <li><a href="{{ url_for('search') }}"    class="{% if request.endpoint=='search'    %}active{% endif %}">🔍 Search</a></li>
+    <li><a href="{{ url_for('available') }}" class="{% if request.endpoint=='available' %}active{% endif %}">📋 Available</a></li>
+    <li><a href="{{ url_for('add_stock') }}" class="{% if request.endpoint=='add_stock' %}active{% endif %}">➕ Add Stock</a></li>
+    <li><a href="{{ url_for('alerts') }}"   class="{% if request.endpoint=='alerts'    %}active{% endif %} alert-link">🚨 Alerts</a></li>
+  </ul>
+</nav>
+
+<main class="page">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul class="flash-list">
+        {% for category, msg in messages %}
+          <li class="flash-msg flash-{{ category }}">
+            {% if category == 'success' %}✅{% else %}❌{% endif %} {{ msg }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+</body>
+</html>
