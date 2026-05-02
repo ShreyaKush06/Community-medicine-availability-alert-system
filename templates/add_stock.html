@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Add / Update Stock{% endblock %}
+{% block title %}Update Stock{% endblock %}
 
 {% block content %}
 <div class="page-header">
-  <h1>➕ Add / Update Medicine Stock</h1>
+  <h1>➕ Update Medicine Stock</h1>
   <p>Admin form — uses MySQL stored procedure <code>update_stock()</code> internally.</p>
 </div>
 
@@ -11,7 +11,7 @@
 
   <!-- Form -->
   <div class="card">
-    <div class="card-header">📝 Stock Entry Form</div>
+    <div class="card-header">Stock Entry Form</div>
     <div class="card-body">
       <form method="POST" action="{{ url_for('add_stock') }}">
         <div style="display:flex;flex-direction:column;gap:1.2rem">
@@ -48,7 +48,7 @@
           </div>
 
           <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">
-            💾 Save Stock
+            Save Stock
           </button>
         </div>
       </form>
@@ -57,7 +57,7 @@
 
   <!-- Recent Stock Table -->
   <div class="card">
-    <div class="card-header">📊 Recent Stock Entries</div>
+    <div class="card-header">Recent Stock Entries</div>
     {% if recent %}
     <div class="table-wrap">
       <table>
@@ -87,9 +87,9 @@
             <td>{{ row.threshold }}</td>
             <td>
               {% if row.stock_status == 'LOW' %}
-                <span class="badge badge-low">⚠️ LOW</span>
+                <span class="badge badge-low">LOW</span>
               {% else %}
-                <span class="badge badge-ok">✅ OK</span>
+                <span class="badge badge-ok">OK</span>
               {% endif %}
             </td>
           </tr>

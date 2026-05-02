@@ -6,9 +6,6 @@
 CREATE DATABASE IF NOT EXISTS medicine_db;
 USE medicine_db;
 
--- ============================================================
--- TABLE: Pharmacy
--- ============================================================
 CREATE TABLE IF NOT EXISTS Pharmacy (
     pharmacy_id INT AUTO_INCREMENT PRIMARY KEY,
     name        VARCHAR(150) NOT NULL,
@@ -16,19 +13,13 @@ CREATE TABLE IF NOT EXISTS Pharmacy (
     contact     VARCHAR(20)  NOT NULL
 );
 
--- ============================================================
--- TABLE: Medicine
--- ============================================================
 CREATE TABLE IF NOT EXISTS Medicine (
     medicine_id  INT AUTO_INCREMENT PRIMARY KEY,
     name         VARCHAR(150) NOT NULL,
     category     VARCHAR(100) NOT NULL,
-    life_saving  TINYINT(1)   NOT NULL DEFAULT 0  -- 1 = Yes, 0 = No
+    life_saving  TINYINT(1)   NOT NULL DEFAULT 0  
 );
 
--- ============================================================
--- TABLE: Stock
--- ============================================================
 CREATE TABLE IF NOT EXISTS Stock (
     stock_id    INT AUTO_INCREMENT PRIMARY KEY,
     pharmacy_id INT NOT NULL,
@@ -42,9 +33,6 @@ CREATE TABLE IF NOT EXISTS Stock (
     UNIQUE KEY uq_pharmacy_medicine (pharmacy_id, medicine_id)
 );
 
--- ============================================================
--- TABLE: Alert
--- ============================================================
 CREATE TABLE IF NOT EXISTS Alert (
     alert_id    INT AUTO_INCREMENT PRIMARY KEY,
     pharmacy_id INT  NOT NULL,
@@ -55,9 +43,6 @@ CREATE TABLE IF NOT EXISTS Alert (
     CONSTRAINT fk_alert_medicine FOREIGN KEY (medicine_id) REFERENCES Medicine(medicine_id) ON DELETE CASCADE
 );
 
--- ============================================================
--- TRIGGER: Auto-insert alert when stock < threshold
--- ============================================================
 DELIMITER $$
 
 CREATE TRIGGER trg_low_stock_alert
@@ -83,9 +68,6 @@ END$$
 
 DELIMITER ;
 
--- ============================================================
--- VIEW: Available medicines (quantity > 0)
--- ============================================================
 CREATE OR REPLACE VIEW available_medicines AS
 SELECT
     p.pharmacy_id,
@@ -104,9 +86,6 @@ JOIN Pharmacy p ON p.pharmacy_id = s.pharmacy_id
 JOIN Medicine m ON m.medicine_id = s.medicine_id
 WHERE s.quantity > 0;
 
--- ============================================================
--- STORED PROCEDURE: Update stock quantity
--- ============================================================
 DELIMITER $$
 
 CREATE PROCEDURE update_stock(
@@ -126,9 +105,6 @@ END$$
 
 DELIMITER ;
 
--- ============================================================
--- SAMPLE DATA
--- ============================================================
 
 INSERT INTO Pharmacy (name, area, contact) VALUES
 ('Apollo Pharmacy',        'Sector 17',    '9876543210'),
@@ -146,17 +122,16 @@ INSERT INTO Medicine (name, category, life_saving) VALUES
 ('Salbutamol Inhaler',     'Bronchodilator', 1),
 ('Omeprazole 20mg',        'Antacid',        0);
 
--- Stock entries (some will be low to trigger alerts)
 CALL update_stock(1, 1, 200, 50);
 CALL update_stock(1, 2, 30,  20);
-CALL update_stock(1, 3, 8,   15);   -- LOW → triggers alert
-CALL update_stock(1, 5, 5,   10);   -- LOW → triggers alert
+CALL update_stock(1, 3, 8,   15);  
+CALL update_stock(1, 5, 5,   10);  
 CALL update_stock(2, 1, 100, 50);
 CALL update_stock(2, 4, 60,  20);
-CALL update_stock(2, 6, 3,   10);   -- LOW → triggers alert
+CALL update_stock(2, 6, 3,   10);   
 CALL update_stock(3, 2, 45,  20);
 CALL update_stock(3, 7, 12,  10);
 CALL update_stock(3, 8, 90,  30);
-CALL update_stock(4, 1, 50,  50);   -- exactly at threshold
+CALL update_stock(4, 1, 50,  50); 
 CALL update_stock(4, 3, 25,  15);
 CALL update_stock(4, 5, 70,  10);

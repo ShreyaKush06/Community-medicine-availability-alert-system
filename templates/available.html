@@ -3,14 +3,14 @@
 
 {% block content %}
 <div class="page-header">
-  <h1>📋 All Available Medicines</h1>
+  <h1>All Available Medicines</h1>
   <p>Queried from the MySQL VIEW <code>available_medicines</code> — shows all stock with quantity &gt; 0.</p>
 </div>
 
 {% if rows %}
 <div class="card">
   <div class="card-header">
-    💊 Live Availability
+    Live Availability
     <span class="badge badge-blue" style="margin-left:.5rem">{{ rows|length }} entries</span>
   </div>
   <div class="table-wrap">
@@ -35,7 +35,7 @@
           <td><span class="badge badge-gray">{{ row.category }}</span></td>
           <td>
             {% if row.life_saving %}
-              <span class="badge badge-critical">🔴 Yes</span>
+              <span class="badge badge-critical">Yes</span>
             {% else %}
               <span class="badge badge-gray">No</span>
             {% endif %}
@@ -51,9 +51,9 @@
           <td>{{ row.threshold }}</td>
           <td>
             {% if row.stock_status == 'LOW' %}
-              <span class="badge badge-low">⚠️ LOW</span>
+              <span class="badge badge-low">LOW</span>
             {% else %}
-              <span class="badge badge-ok">✅ OK</span>
+              <span class="badge badge-ok">OK</span>
             {% endif %}
           </td>
         </tr>

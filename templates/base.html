@@ -11,14 +11,14 @@
 
 <nav class="navbar">
   <a href="{{ url_for('index') }}" class="nav-brand">
-    💊 MedAlert
+    MedAlert
     <span class="pill">Community</span>
   </a>
   <ul class="nav-links">
     <li><a href="{{ url_for('index') }}"     class="{% if request.endpoint=='index'     %}active{% endif %}">🏠 Home</a></li>
     <li><a href="{{ url_for('search') }}"    class="{% if request.endpoint=='search'    %}active{% endif %}">🔍 Search</a></li>
     <li><a href="{{ url_for('available') }}" class="{% if request.endpoint=='available' %}active{% endif %}">📋 Available</a></li>
-    <li><a href="{{ url_for('add_stock') }}" class="{% if request.endpoint=='add_stock' %}active{% endif %}">➕ Add Stock</a></li>
+    <li><a href="{{ url_for('add_stock') }}" class="{% if request.endpoint=='add_stock' %}active{% endif %}">➕ Update Stock</a></li>
     <li><a href="{{ url_for('alerts') }}"   class="{% if request.endpoint=='alerts'    %}active{% endif %} alert-link">🚨 Alerts</a></li>
   </ul>
 </nav>

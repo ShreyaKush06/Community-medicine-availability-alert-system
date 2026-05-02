@@ -14,21 +14,15 @@ load_dotenv(dotenv_path=Path(__file__).parent / ".env")
 app = Flask(__name__, static_folder='credentials/static')
 app.secret_key = os.getenv("SECRET_KEY", "medicine_alert_secret_2024")
 
-# ──────────────────────────────────────────────
-# Database connection helper
-# ──────────────────────────────────────────────
 def get_db():
     return mysql.connector.connect(
         host     = "localhost",
         port     = 3306,
         user     = "root",
-        password = "Shreya@OP1",  # ← paste your real password
+        password = "Shreya@OP1",  
         database = "medicine_db",
     )
 
-# ──────────────────────────────────────────────
-# Error page helper — no template needed
-# ──────────────────────────────────────────────
 def error_page(message):
     """Return a self-contained HTML error page without using a template."""
     html = f"""<!DOCTYPE html>
@@ -52,7 +46,7 @@ def error_page(message):
 </head>
 <body>
   <div class="box">
-    <h2>⚠️ Database Connection Error</h2>
+    <h2> Database Connection Error</h2>
     <p>Flask could not connect to MySQL. Check your <code>.env</code> file and make sure MySQL is running.</p>
     <code>{message}</code>
     <div class="tip">
@@ -69,9 +63,6 @@ def error_page(message):
     return make_response(html, 500)
 
 
-# ──────────────────────────────────────────────
-# Route: Home
-# ──────────────────────────────────────────────
 @app.route("/")
 def index():
     try:
@@ -105,9 +96,6 @@ def index():
         return error_page(str(e))
 
 
-# ──────────────────────────────────────────────
-# Route: Search
-# ──────────────────────────────────────────────
 @app.route("/search", methods=["GET"])
 def search():
     try:
@@ -171,9 +159,6 @@ def search():
         return error_page(str(e))
 
 
-# ──────────────────────────────────────────────
-# Route: Add / Update Stock
-# ──────────────────────────────────────────────
 @app.route("/add_stock", methods=["GET", "POST"])
 def add_stock():
     try:
@@ -234,9 +219,6 @@ def add_stock():
         return error_page(str(e))
 
 
-# ──────────────────────────────────────────────
-# Route: Alerts
-# ──────────────────────────────────────────────
 @app.route("/alerts")
 def alerts():
     try:
@@ -286,9 +268,6 @@ def alerts():
         return error_page(str(e))
 
 
-# ──────────────────────────────────────────────
-# Route: View all available medicines (uses VIEW)
-# ──────────────────────────────────────────────
 @app.route("/available")
 def available():
     try:
@@ -302,16 +281,14 @@ def available():
         return error_page(str(e))
 
 
-# ──────────────────────────────────────────────
 if __name__ == "__main__":
-    # Test DB connection before starting — gives a clear error message
     print("\n🔍 Testing MySQL connection...")
     try:
         test = get_db()
         test.close()
         print("✅ MySQL connected successfully!\n")
     except Error as e:
-        print(f"\n❌ MySQL connection FAILED: {e}")
+        print(f"\n MySQL connection FAILED: {e}")
         print("   → Check DB_HOST, DB_USER, DB_PASSWORD, DB_NAME in your .env file")
         print("   → Make sure MySQL service is running\n")
 
