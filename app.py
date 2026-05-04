@@ -16,11 +16,11 @@ app.secret_key = os.getenv("SECRET_KEY", "medicine_alert_secret_2024")
 
 def get_db():
     return mysql.connector.connect(
-        host     = os.getenv("DB_HOST"),
-        port     = int(os.getenv("DB_PORT", "3306")),
-        user     = os.getenv("DB_USER"),
+        host      = "mysql-2e849ff8-shreyakush-bf6d.d.aivencloud.com",
+        port      = 27322,
+        user      = "avnadmin",
         password = os.getenv("DB_PASSWORD"),
-        database = os.getenv("DB_NAME"),
+        database  = "defaultdb",
         ssl_ca    = "/etc/ssl/certs/ca-certificates.crt"
     )
 
