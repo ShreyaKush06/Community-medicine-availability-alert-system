@@ -16,11 +16,12 @@ app.secret_key = os.getenv("SECRET_KEY", "medicine_alert_secret_2024")
 
 def get_db():
     return mysql.connector.connect(
-        host     = "localhost",
-        port     = 3306,
-        user     = "root",
-        password = "Shreya@OP1",  
-        database = "medicine_db",
+        host     = os.getenv("DB_HOST"),
+        port     = int(os.getenv("DB_PORT", "3306")),
+        user     = os.getenv("DB_USER"),
+        password = os.getenv("DB_PASSWORD"),
+        database = os.getenv("DB_NAME"),
+        ssl_disabled = os.getenv("DB_USE_SSL", "false").lower() != "true"
     )
 
 def error_page(message):
