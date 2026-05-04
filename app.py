@@ -16,12 +16,11 @@ app.secret_key = os.getenv("SECRET_KEY", "medicine_alert_secret_2024")
 
 def get_db():
     return mysql.connector.connect(
-        host      = "mysql-2e849ff8-shreyakush-bf6d.d.aivencloud.com",
-        port      = 27322,
-        user      = "avnadmin",
-        password = os.getenv("DB_PASSWORD"),
-        database  = "defaultdb",
-        ssl_ca    = "/etc/ssl/certs/ca-certificates.crt"
+        host     = "localhost",
+        port     = 3306,
+        user     = "root",
+        password = "Shreya@OP1",  
+        database = "medicine_db",
     )
 
 def error_page(message):
